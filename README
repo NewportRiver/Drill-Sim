@@ -1,0 +1,169 @@
+---
+
+# ===============================
+# 🪖 DS VOICE TRAINER: FIELD OPS
+# ===============================
+
+> **Mission Briefing:**  
+> Train like a future Drill Sergeant. Recite official Army scripts, sharpen your command voice, and get real-time, AI-driven feedback. From boot camp to black hat—this is your verbal ruck march.
+
+---
+
+## 🎯 Mission Objective
+
+The **DS Voice Trainer** is a tactical-grade AI tool designed for soldiers preparing for Drill Sergeant Academy. It transforms raw script memorization into a fully interactive, gamified training simulator—combining precision scoring, visual performance indicators, and themed reinforcement based on military units and schools.
+
+---
+
+## 🎮 Gameplay Concept & Reinforcement Engine
+
+This app isn’t just a voice grader—it’s a **memory combat trainer**.
+
+We use **Positive Reinforcement Memory Stimulation (PRMS)** to lock in script retention and boost neural performance under pressure.
+
+### How it Works:
+
+| Feature                      | Reinforcement Effect                                                  |
+|------------------------------|-----------------------------------------------------------------------|
+| ✅ **Correct Word Recited**  | Word glows green, pulse FX, XP awarded                               |
+| ❌ **Missed Word**           | Flash red, glitch noise, no XP earned                                |
+| 🧠 **Repeat Accuracy**       | Higher repeat scores = more points + theme unlocks                   |
+| 🏅 **Drill Streaks**         | Consecutive 100% runs = badges, ranks, or secret visual skins         |
+| 🔁 **Error Recall Training** | Missed words are stored and practiced in micro-drills                |
+
+The result? Your brain gets **visually, audibly, and tactically rewarded** when memory and verbal output align correctly. It’s built like a battle drill—with performance feedback designed to *burn it into memory*.
+
+---
+
+## 🧭 Feature Loadout
+
+| Feature                     | Description                                                                 |
+|-----------------------------|-----------------------------------------------------------------------------|
+| **Training Mode**           | Script displayed with real-time word tracking and color-coded feedback     |
+| **Drill Mode**              | Script hidden; visual-only performance feedback while reciting              |
+| **Gamified Feedback**       | Word accuracy triggers effects: flashes, HUD glow, static, or alerts       |
+| **Unit Themes**             | Customize interface with Airborne, SF, Delta, Sniper, Scout, etc.          |
+| **Audio Startup FX**        | Custom MP3 plays on app launch (your choice of fire-up sound)              |
+| **Script Uploads**          | Load official DS scripts easily from `data/scripts/` folder                |
+| **Rubric Integration**      | Future support for tone, volume, confidence, and leadership scoring        |
+
+---
+
+## 🧱 Repo Structure
+
+ds-voice-trainer/ │ 
+├── backend/ │  
+├── app.py    
+
+# FastAPI endpoints (coming soon) │  
+├── main.py            
+
+# Local test runner for compare.py │ 
+├── compare.py         
+
+# Script vs transcript AI engine │
+
+└── rubric_engine.py   
+
+# Placeholder for scoring logic │ 
+├── frontend/ │ 
+├── (Coming Soon)        
+
+# Flutter or React UI for Training + Drill modes │ 
+├── data/ │  
+├── scripts/           
+
+# Reference scripts (e.g. attention.txt) │ 
+└── transcripts/        
+
+# User speech transcriptions │ 
+├── assets/ │   
+└── sounds/             
+
+# 🔊 Your custom startup_theme.mp3 goes here │ 
+└── README.md
+
+---
+
+## 🔊 App Launch Customization
+
+> **[🪖] Startup Sound FX**  
+> Play your own **motivational intro sound** every time the app launches—like a war sim or FPS boot-up.
+
+### Drop your custom `.mp3` file here:
+- `/assets/sounds/startup_theme.mp3`
+
+It’ll trigger on launch. Replace it anytime.  
+Suggestions: “Attention on Deck,” “Wake Up, Troop,” or any custom Drill Sergeant intro bark.
+
+---
+
+## 🧪 Local Test Instructions
+
+### Clone & Set Up
+```bash
+git clone https://github.com/YOUR-USERNAME/ds-voice-trainer.git
+cd ds-voice-trainer/backend
+python -m venv venv
+source venv/bin/activate 
+
+# Windows: venv\Scripts\activate
+
+pip install -r requirements.txt
+
+Run a Test Comparison
+
+python main.py
+
+This will simulate a transcript vs. the official script and print a full feedback report.
+
+
+---
+
+📋 Roadmap: Tactical Milestones
+
+[x] Voice Matching Engine (compare.py)
+
+[x] Local test runner (main.py)
+
+[x] App Startup FX Support
+
+[x] Theme Support Design
+
+[x] Gamification Feedback System Plan
+
+[ ] Flutter frontend UI (Training & Drill Modes)
+
+[ ] AI Rubric Engine for tone/confidence/pacing
+
+[ ] Theme Unlock System (unit-based skins)
+
+[ ] User XP/Rank Tracking
+
+[ ] Deployment: Desktop & Mobile
+
+
+
+---
+
+✍️ Authorship
+
+Created by:
+Mark Anthony Bartholomew [@NewportRiver]
+AI Researcher | Managing Director
+‐‐-
+Architect [@NewportRiver] 
+AI Framework Specialist | Senior Engineer
+
+
+---
+
+⚖️ Licensing
+
+MIT License – open-source for educational, military, and training use.
+Free for use in any U.S. military-affiliated training pipeline or leadership program.
+
+Fair Use Note:
+This software may incorporate U.S. Army public-domain documents (TCs, FMs).
+It is not an official Army product. It is privately developed for educational enhancement and must not be used for commercial exploitation without permission.
+
