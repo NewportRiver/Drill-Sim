@@ -107,7 +107,7 @@ Suggestions: “Attention on Deck,” “Wake Up, Troop,” or any custom Drill 
 
 ### Clone & Set Up
 ```bash
-git clone https://github.com/YOUR-USERNAME/ds-voice-trainer.git
+git clone https://github.com/NewportRiver/Drill-Sim.git
 cd ds-voice-trainer/backend
 python -m venv venv
 source venv/bin/activate 
