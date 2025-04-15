@@ -1,0 +1,151 @@
+/* === Base Page Styling === */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean, readable font stack */
+    margin: 0;
+    padding: 0;
+    background: #f0f2f5; /* Light gray background */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all content horizontally */
+  }
+  
+  /* === Header Styling === */
+  header {
+    background: #20232a; /* Dark header bar */
+    color: white;
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); /* Soft drop shadow */
+  }
+  
+  /* === Main Container === */
+  .container {
+    max-width: 900px;
+    margin: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Card-style UI */
+    text-align: center;
+  }
+  
+  /* === Drill Sergeant Icon Styling === */
+  .drill-sgt-icon {
+    width: 120px;
+    margin-bottom: 20px;
+  }
+  
+  /* === Button Groups Styling === */
+  .module-buttons button,
+  .mode-buttons button {
+    margin: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #004085; /* Dark blue default */
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* === Hover Effect for Buttons === */
+  .module-buttons button:hover,
+  .mode-buttons button:hover {
+    background-color: #005cbf; /* Lighter blue on hover */
+  }
+  
+  /* === Script Display Area === */
+  .script-text {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    height: 250px;
+    overflow-y: auto; /* Enables scroll if content exceeds height */
+    text-align: left;
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+  
+  /* === Script Word Styling === */
+  .script-text span {
+    opacity: 0.4; /* Default faded look */
+    transition: all 0.2s ease;
+  }
+  
+  /* === Correct Word Highlight === */
+  .script-text span.correct {
+    opacity: 1;
+    color: green;
+    font-weight: bold;
+  }
+  
+  /* === Typing Mode Input Area (Hidden by Default) === */
+  .typing-mode {
+    margin-top: 20px;
+    display: none; /* Shown only when typing mode is active */
+  }
+  
+  .typing-mode input {
+    width: 90%;
+    padding: 14px;
+    font-size: 1.1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  /* === Progress Bar for Script Completion === */
+  .progress-bar {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+  }
+  
+  /* === Individual Segments of the Progress Bar === */
+  .progress-segment {
+    flex: 1;
+    margin: 0 1px;
+    background-color: #ddd; /* Default unfilled segment */
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .progress-segment.filled {
+    background-color: green; /* Filled progress segments */
+  }
+  
+  /* === Responsive Mobile Tweaks === */
+  @media screen and (max-width: 600px) {
+    .script-text {
+      font-size: 1em;
+      height: 200px;
+    }
+  
+    .typing-mode input {
+      width: 95%;
+    }
+  }
+  
+  /* === Stylized Game Title Banner === */
+  .title-banner {
+    font-family: 'Bebas Neue', sans-serif; /* Bold, uppercase military look */
+    font-size: 3rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #333;
+    letter-spacing: 1px;
+  }
+  
+  /* === Custom Font Import === */
+  @font-face {
+    font-family: 'Bebas Neue';
+    src: url('../fonts/BebasNeue-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
