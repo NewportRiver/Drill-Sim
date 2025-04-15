@@ -220,182 +220,178 @@
     };
   </script>
 
-  <script>
-   // Holds the currently active script content as an array of words
-let currentScript = [];
+<script>
+  // Holds the currently active script content as an array of words
+  let currentScript = [];
 
-// Tracks current mode: 'practice', 'test', or 'typing'
-let currentMode = 'practice';
+  // Tracks current mode: 'practice', 'test', or 'typing'
+  let currentMode = 'practice';
 
-/**
- * Load a module by number, e.g., 1 = Module 1
- * Tries to load from external JSON, falls back to embeddedScripts if offline
- */
-async function loadModule(module) {
-  const icon = document.getElementById('drillIcon');
-const newSrc = `drill-sgt-module${module}.png`;
+  // Tracks the current word index for speech mode
+  let currentWordIndex = 0;
 
-fetch(newSrc, { method: 'HEAD' })
-  .then(res => {
-    if (res.ok) icon.src = newSrc;
-  })
-  .catch(() => {
-    // Do nothing; keep current icon if image doesn't exist
-  });
-
-
-  // Reset typing input and hide it (for speech mode)
-  document.getElementById('typingInput').value = '';
-  document.getElementById('typingMode').style.display = 'none';
-
-  try {
-    // Try to load module script from external file
-    const res = await fetch(`/script/module${module}_script.json`);
-    const data = await res.json();
-    currentScript = data.script_steps.map(step => step.text).join(' ').split(/\s+/);
-  } catch (err) {
-    // Use embedded backup if fetch fails
-    const fallback = embeddedScripts[module];
-    currentScript = fallback.script_steps.map(step => step.text).join(' ').split(/\s+/);
+  // Utility to remove punctuation
+  function cleanWord(word) {
+    return word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
   }
 
-  displayScript(); // Show the script words on screen
-}
+  /**
+   * Load a module by number, e.g., 1 = Module 1
+   * Tries to load from external JSON, falls back to embeddedScripts if offline
+   */
+  async function loadModule(module) {
+    currentWordIndex = 0; // 🔁 Reset on module load
 
-/**
- * Display the script as a sequence of <span> words, ready to be matched
- */
-function displayScript() {
-  const container = document.getElementById('scriptText');
-  container.innerHTML = '';
+    // Reset typing input and hide it (for speech mode)
+    document.getElementById('typingInput').value = '';
+    document.getElementById('typingMode').style.display = 'none';
 
-  // Create a span for each word
-  currentScript.forEach(word => {
-    const span = document.createElement('span');
-    span.textContent = word + ' ';
-    container.appendChild(span);
-  });
-
-  renderProgressBar();      // Draw empty 19-block progress bar
-  updateProgressBar();      // Ensure initial state is reset
-}
-
-/**
- * Render 19 equal progress segments (each = 5% of script)
- */
-function renderProgressBar() {
-  const bar = document.getElementById('progressBar');
-  bar.innerHTML = ''; // Clear previous segments
-
-  for (let i = 0; i < 19; i++) {
-    const segment = document.createElement('div');
-    segment.className = 'progress-segment';
-    bar.appendChild(segment);
-  }
-}
-
-/**
- * Update progress based on how many words are marked as 'correct'
- */
-function updateProgressBar() {
-  const spans = document.querySelectorAll('#scriptText span');
-  const matchedCount = Array.from(spans).filter(span => span.classList.contains('correct')).length;
-  const totalWords = spans.length;
-  const percentComplete = (matchedCount / totalWords) * 100;
-
-  // Fill segments based on 5% intervals (total of 19 segments)
-  const segmentsToFill = Math.floor(percentComplete / 5);
-  const segments = document.querySelectorAll('.progress-segment');
-
-  segments.forEach((segment, i) => {
-    if (i < segmentsToFill) {
-      segment.classList.add('filled');
-    } else {
-      segment.classList.remove('filled');
+    try {
+      // Try to load module script from external file
+      const res = await fetch(`/script/module${module}_script.json`);
+      const data = await res.json();
+      currentScript = data.script_steps.map(step => step.text).join(' ').split(/\s+/);
+    } catch (err) {
+      // Use embedded backup if fetch fails
+      const fallback = embeddedScripts[module];
+      currentScript = fallback.script_steps.map(step => step.text).join(' ').split(/\s+/);
     }
-  });
-}
 
-/**
- * Typing Mode Logic: Highlight each correct typed word
- */
-function handleTyping() {
-  const typedText = document.getElementById('typingInput').value.trim().toLowerCase();
-  const typedWords = typedText.split(/\s+/);
-  const spans = document.querySelectorAll('#scriptText span');
-
-// Utility to remove punctuation
-function cleanWord(word) {
-  return word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
-}
-
-// Compare typed words to original script
-spans.forEach((span, index) => {
-  const expectedWord = cleanWord(currentScript[index] || '');
-  const typedWord = cleanWord(typedWords[index] || '');
-
-  if (typedWord === expectedWord) {
-    span.classList.add('correct');
+    displayScript(); // Show the script words on screen
   }
-});
 
+  /**
+   * Display the script as a sequence of <span> words, ready to be matched
+   */
+  function displayScript() {
+    const container = document.getElementById('scriptText');
+    container.innerHTML = '';
+    currentWordIndex = 0; // 🔁 Reset when displaying new script
 
-  updateProgressBar(); // Update visual tracker
-}
-
-/**
- * Start Practice Mode (speech-based highlighting)
- */
-function startPracticeMode() {
-  currentMode = 'practice';
-  document.getElementById('typingMode').style.display = 'none';
-  startSpeechRecognition();
-}
-
-/**
- * Start Testing Mode (only correct words appear as feedback)
- */
-function startTestingMode() {
-  currentMode = 'test';
-  document.getElementById('typingMode').style.display = 'none';
-  startSpeechRecognition();
-}
-
-/**
- * Show Typing Mode UI
- */
-function startTypingMode() {
-  currentMode = 'typing';
-  document.getElementById('typingMode').style.display = 'block';
-}
-
-/**
- * Speech recognition logic using Web Speech API
- */
-function startSpeechRecognition() {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.continuous = true;           // Keep listening until manually stopped
-  recognition.interimResults = true;       // Allow real-time feedback
-
-  recognition.onresult = function(event) {
-    // Get the most recent spoken words
-    const spokenWords = event.results[event.results.length - 1][0].transcript.toLowerCase().trim().split(/\s+/);
-    const spans = document.querySelectorAll('#scriptText span');
-
-    // Match spoken words to original script
-    spokenWords.forEach(spoken => {
-      currentScript.forEach((scriptWord, i) => {
-        if (spoken === scriptWord.toLowerCase() && !spans[i].classList.contains('correct')) {
-          spans[i].classList.add('correct');
-        }
-      });
+    currentScript.forEach(word => {
+      const span = document.createElement('span');
+      span.textContent = word + ' ';
+      container.appendChild(span);
     });
 
-    updateProgressBar(); // Reflect progress visually
-  };
+    renderProgressBar();      
+    updateProgressBar();      
+  }
 
-  recognition.start();
-}
-  </script>
+  /**
+   * Render 19 equal progress segments (each = 5% of script)
+   */
+  function renderProgressBar() {
+    const bar = document.getElementById('progressBar');
+    bar.innerHTML = ''; 
+
+    for (let i = 0; i < 19; i++) {
+      const segment = document.createElement('div');
+      segment.className = 'progress-segment';
+      bar.appendChild(segment);
+    }
+  }
+
+  /**
+   * Update progress based on how many words are marked as 'correct'
+   */
+  function updateProgressBar() {
+    const spans = document.querySelectorAll('#scriptText span');
+    const matchedCount = Array.from(spans).filter(span => span.classList.contains('correct')).length;
+    const totalWords = spans.length;
+    const percentComplete = (matchedCount / totalWords) * 100;
+
+    const segmentsToFill = Math.floor(percentComplete / 5);
+    const segments = document.querySelectorAll('.progress-segment');
+
+    segments.forEach((segment, i) => {
+      if (i < segmentsToFill) {
+        segment.classList.add('filled');
+      } else {
+        segment.classList.remove('filled');
+      }
+    });
+  }
+
+  /**
+   * Typing Mode Logic: Highlight each correct typed word
+   */
+  function handleTyping() {
+    const typedText = document.getElementById('typingInput').value.trim().toLowerCase();
+    const typedWords = typedText.split(/\s+/);
+    const spans = document.querySelectorAll('#scriptText span');
+
+    // Reset all highlights
+    spans.forEach(span => span.classList.remove('correct'));
+
+    spans.forEach((span, index) => {
+      const expectedWord = cleanWord(currentScript[index] || '');
+      const typedWord = cleanWord(typedWords[index] || '');
+
+      if (typedWord === expectedWord) {
+        span.classList.add('correct');
+      }
+    });
+
+    updateProgressBar();
+  }
+
+  /**
+   * Start Practice Mode (speech-based highlighting)
+   */
+  function startPracticeMode() {
+    currentMode = 'practice';
+    currentWordIndex = 0; // 🔁 Reset on mode switch
+    document.getElementById('typingMode').style.display = 'none';
+    startSpeechRecognition();
+  }
+
+  /**
+   * Start Testing Mode (only correct words appear as feedback)
+   */
+  function startTestingMode() {
+    currentMode = 'test';
+    currentWordIndex = 0; // 🔁 Reset on mode switch
+    document.getElementById('typingMode').style.display = 'none';
+    startSpeechRecognition();
+  }
+
+  /**
+   * Show Typing Mode UI
+   */
+  function startTypingMode() {
+    currentMode = 'typing';
+    currentWordIndex = 0; // 🔁 Reset on mode switch
+    document.getElementById('typingMode').style.display = 'block';
+  }
+
+  /**
+   * Speech recognition logic using Web Speech API
+   */
+  function startSpeechRecognition() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = function(event) {
+      const spokenWords = event.results[event.results.length - 1][0].transcript.toLowerCase().trim().split(/\s+/);
+      const spans = document.querySelectorAll('#scriptText span');
+
+      spokenWords.forEach(spoken => {
+        const cleanedSpoken = cleanWord(spoken);
+        const expected = cleanWord(currentScript[currentWordIndex] || '');
+
+        if (cleanedSpoken === expected) {
+          spans[currentWordIndex].classList.add('correct');
+          currentWordIndex++;
+        }
+      });
+
+      updateProgressBar();
+    };
+
+    recognition.start();
+  }
+</script>
 </body>
 </html>
