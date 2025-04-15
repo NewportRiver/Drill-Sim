@@ -19,7 +19,7 @@
 
 <!--
     ========================== DEVELOPER UPDATE LOG ============================
-    Update: Added typing practise with completion tracker
+    Update: Updated word tracker to not track puncuation.
     Date: April 14, 2025
     Author: Bart
     Summary: JSON script is now embedded in the page for local use if fetch fails or is unavailable.
@@ -150,16 +150,27 @@
   }
 }
 
+.title-banner {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
   </style>
 </head>
 <body>
-  <header>
-    <h1>Drill Sgt Academy</h1>
-  </header>
+ <!-- Title inside the container -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+<div class="container">
+  <h1 class="title-banner">Drill Sgt Academy</h1>
+  <img src="drillicon.png" alt="Drill Sgt" class="drill-sgt-icon" id="drillIcon" />
 
   <div class="container">
-    <img src="drillicon.png" alt="Drill Sgt" class="drill-sgt-icon" id="drillIcon" />
-
+  
     <div class="module-buttons">
       <button onclick="loadModule(1)">Module 1</button>
     </div>
@@ -222,7 +233,16 @@ let currentMode = 'practice';
  */
 async function loadModule(module) {
   const icon = document.getElementById('drillIcon');
-  icon.src = `drill-sgt-module${module}.png`; // Update drill icon per module
+const newSrc = `drill-sgt-module${module}.png`;
+
+fetch(newSrc, { method: 'HEAD' })
+  .then(res => {
+    if (res.ok) icon.src = newSrc;
+  })
+  .catch(() => {
+    // Do nothing; keep current icon if image doesn't exist
+  });
+
 
   // Reset typing input and hide it (for speech mode)
   document.getElementById('typingInput').value = '';
@@ -304,13 +324,21 @@ function handleTyping() {
   const typedWords = typedText.split(/\s+/);
   const spans = document.querySelectorAll('#scriptText span');
 
-  // Compare typed words to original script
-  spans.forEach((span, index) => {
-    const expectedWord = currentScript[index]?.toLowerCase();
-    if (typedWords[index] === expectedWord) {
-      span.classList.add('correct');
-    }
-  });
+// Utility to remove punctuation
+function cleanWord(word) {
+  return word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
+}
+
+// Compare typed words to original script
+spans.forEach((span, index) => {
+  const expectedWord = cleanWord(currentScript[index] || '');
+  const typedWord = cleanWord(typedWords[index] || '');
+
+  if (typedWord === expectedWord) {
+    span.classList.add('correct');
+  }
+});
+
 
   updateProgressBar(); // Update visual tracker
 }
