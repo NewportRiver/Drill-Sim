@@ -1,42 +1,68 @@
-/* === Base Page Styling === */
+/* --------------------------------------------------
+   🎨 GENERAL BASE STYLING
+-------------------------------------------------- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean, readable font stack */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f0f2f5; /* Light gray background */
+    background: #f0f2f5;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center all content horizontally */
+    align-items: center;
   }
   
-  /* === Header Styling === */
+  @font-face {
+    font-family: 'Bebas Neue';
+    src: url('../fonts/BebasNeue-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* --------------------------------------------------
+     🔠 TYPOGRAPHY & HEADERS
+  -------------------------------------------------- */
+  .title-banner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #333;
+    letter-spacing: 1px;
+  }
+  
+  /* --------------------------------------------------
+     📦 LAYOUT CONTAINERS
+  -------------------------------------------------- */
   header {
-    background: #20232a; /* Dark header bar */
+    background: #20232a;
     color: white;
     padding: 15px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); /* Soft drop shadow */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
   
-  /* === Main Container === */
   .container {
     max-width: 900px;
     margin: 20px;
     padding: 20px;
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Card-style UI */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
   
-  /* === Drill Sergeant Icon Styling === */
+  /* --------------------------------------------------
+     🧍 ICONS & IMAGERY
+  -------------------------------------------------- */
   .drill-sgt-icon {
     width: 120px;
     margin-bottom: 20px;
   }
   
-  /* === Button Groups Styling === */
+  /* --------------------------------------------------
+     🕹️ BUTTONS
+  -------------------------------------------------- */
   .module-buttons button,
   .mode-buttons button {
     margin: 8px;
@@ -44,18 +70,19 @@ body {
     font-size: 1rem;
     border-radius: 6px;
     border: none;
-    background-color: #004085; /* Dark blue default */
+    background-color: #004085;
     color: white;
     cursor: pointer;
   }
   
-  /* === Hover Effect for Buttons === */
   .module-buttons button:hover,
   .mode-buttons button:hover {
-    background-color: #005cbf; /* Lighter blue on hover */
+    background-color: #005cbf;
   }
   
-  /* === Script Display Area === */
+  /* --------------------------------------------------
+     📜 SCRIPT DISPLAY
+  -------------------------------------------------- */
   .script-text {
     margin-top: 20px;
     padding: 15px;
@@ -63,29 +90,29 @@ body {
     border-radius: 8px;
     background-color: #f9f9f9;
     height: 250px;
-    overflow-y: auto; /* Enables scroll if content exceeds height */
+    overflow-y: auto;
     text-align: left;
     font-size: 1.1em;
     line-height: 1.6;
   }
   
-  /* === Script Word Styling === */
   .script-text span {
-    opacity: 0.4; /* Default faded look */
+    opacity: 0.4;
     transition: all 0.2s ease;
   }
   
-  /* === Correct Word Highlight === */
   .script-text span.correct {
     opacity: 1;
     color: green;
     font-weight: bold;
   }
   
-  /* === Typing Mode Input Area (Hidden by Default) === */
+  /* --------------------------------------------------
+     ⌨️ TYPING MODE
+  -------------------------------------------------- */
   .typing-mode {
     margin-top: 20px;
-    display: none; /* Shown only when typing mode is active */
+    display: none;
   }
   
   .typing-mode input {
@@ -94,33 +121,163 @@ body {
     font-size: 1.1em;
     border: 1px solid #ccc;
     border-radius: 6px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* --------------------------------------------------
+   📊 PROGRESS BAR CONTAINER
+-------------------------------------------------- */
+#progressBarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 12px;
+  }
+  
+  /* The visual segmented progress bar */
+  #progressBar {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    height: 20px;
+    padding: 0 4px;
+    background: #e0e0e0;
+    border-radius: 6px;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
   }
   
-  /* === Progress Bar for Script Completion === */
-  .progress-bar {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between;
-    height: 20px;
-  }
-  
-  /* === Individual Segments of the Progress Bar === */
+  /* Each segment */
   .progress-segment {
     flex: 1;
-    margin: 0 1px;
-    background-color: #ddd; /* Default unfilled segment */
+    margin: 0 2px;
+    background-color: #ddd;
     border-radius: 4px;
     transition: background-color 0.3s;
   }
   
   .progress-segment.filled {
-    background-color: green; /* Filled progress segments */
+    background-color: #4caf50;
   }
   
-  /* === Responsive Mobile Tweaks === */
+  /* Percent Text */
+  #progressPercent {
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4caf50;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  #progressBar.flash {
+    animation: flashBar 0.5s ease;
+  }
+  
+  @keyframes flashBar {
+    0% { box-shadow: 0 0 5px #0f0; }
+    50% { box-shadow: 0 0 20px #0f0; }
+    100% { box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+  }
+
+  /* --------------------------------------------------
+     🎁 REWARD POPUP
+  -------------------------------------------------- */
+ /* Wrapped Reward Popup and DS Icon in container */
+   .drill-sgt-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+ 
+  #rewardPopup {
+    position: absolute;
+    bottom: 100%; /* Above the icon */
+    left: 50%;     /* Centered horizontally */
+    transform: translateX(-50%);
+    background: #222;
+    color: #0f0;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+    white-space: nowrap;
+  }
+
+/* Centered speech bubble tail */
+#rewardPopup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: #222 transparent transparent transparent;
+  }
+
+  @keyframes popFade {
+    0% {
+      transform: translateX(-50%) scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(-50%) scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-50%) scale(1);
+      opacity: 0;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    #rewardPopup {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  
+    #rewardPopup::after {
+      left: 50%;
+    }
+  }
+
+  /* Hidden Class Utility */
+  .hidden {
+    display: none;
+  }
+  
+  .rewardSound {
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Reward Popup Animation */
+  @keyframes popFade {
+    0% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  .popFade {
+    animation: popFade 1.5s ease;
+  }
+  
+  /* --------------------------------------------------
+     📱 RESPONSIVE TWEAKS
+  -------------------------------------------------- */
   @media screen and (max-width: 600px) {
     .script-text {
       font-size: 1em;
@@ -132,20 +289,22 @@ body {
     }
   }
   
-  /* === Stylized Game Title Banner === */
-  .title-banner {
-    font-family: 'Bebas Neue', sans-serif; /* Bold, uppercase military look */
-    font-size: 3rem;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #333;
-    letter-spacing: 1px;
+  #scriptText .word {
+    margin-right: 6px;
+    display: inline-block;
   }
   
-  /* === Custom Font Import === */
-  @font-face {
-    font-family: 'Bebas Neue';
-    src: url('../fonts/BebasNeue-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  #scriptText .letter {
+    display: inline-block;
+  }
+
+  .word.correct {
+    animation: popIn 0.3s ease;
+    color: limegreen;
+  }
+  
+  @keyframes popIn {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
   }

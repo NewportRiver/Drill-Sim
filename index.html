@@ -47,8 +47,11 @@
     <!-- Title Banner / Logo Area -->
     <h1 class="title-banner" id="appTitle">Drill Sgt Academy</h1>
 
-    <!-- App Icon Image -->
-    <img src="drillicon.png" alt="Drill Sgt" class="drill-sgt-icon" id="drillIcon" />
+   <!-- Icon + Popup Container -->
+    <div class="drill-sgt-wrapper">
+      <img src="drillicon.png" alt="Drill Sgt" class="drill-sgt-icon" id="drillIcon" />
+      <div id="rewardPopup" class="hidden">🎖️ Reward Unlocked!</div>
+    </div>
 
     <!-- Nested Container for Content Blocks -->
     <div class="container" id="contentWrapper">
@@ -70,7 +73,10 @@
       <div class="script-text" id="scriptText"></div>
 
       <!-- Visual Progress Bar (Based on Correct Words) -->
-      <div class="progress-bar" id="progressBar"></div>
+      <div id="progressBarContainer">
+        <div id="progressBar"></div>
+        <div id="progressPercent">0%</div>
+      </div>
 
       <!-- Typing Input Area (Visible Only in Typing Mode) -->
       <div class="typing-mode" id="typingMode">
@@ -84,6 +90,22 @@
 
     </div> <!-- End contentWrapper -->
   </div> <!-- End mainContainer -->
+
+<!-- Reward Popup Message -->
+<div id="rewardPopup" class="hidden">🎖️ Reward Unlocked!</div>
+
+<!-- Test Reward Popup Button -->
+<button onclick="triggerReward()">Test Reward</button>
+
+
+<!-- Audio Clips for Randomized Reward Feedback -->
+<audio class="rewardSound" audio id="successSound1" src="static/sounds/success1.mp3"></audio>
+<audio class="rewardSound" audio id="successSound2" src="static/sounds/success2.mp3"></audio>
+<audio class="rewardSound" audio id="successSound3" src="static/sounds/success3.mp3"></audio>
+<audio class="rewardSound" audio id="successSound4" src="static/sounds/success4.mp3"></audio>
+<audio class="rewardSound" audio id="successSound5" src="static/sounds/success5.mp3"></audio>
+<audio class="rewardSound" audio id="successSound6" src="static/sounds/success6.mp3"></audio>
+<audio class="rewardSound" audio id="successSound7" src="static/sounds/success7.mp3"></audio>
 
 </body>
 </html>

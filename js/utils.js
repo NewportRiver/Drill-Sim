@@ -33,3 +33,7 @@ export function cleanWord(word) {
       );
     }
   }
+
+  export function stripLineNumber(text) {
+    return text.replace(/^\d+[:.]?\s*/, ''); // removes "1:", "1." etc.
+  }

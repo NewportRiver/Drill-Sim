@@ -1,49 +1,45 @@
 // === Utility Imports ===
-// cleanWord: strips punctuation and normalizes casing for comparison
-// debugLog: namespaced debug logging utility
-import { cleanWord, debugLog } from './utils.js';
+import { cleanWord, stripLineNumber, debugLog } from './utils.js';
+import { updateProgressBar } from './progress.js';
 
-// Progress bar updater (shared with other modes)
-import { updateProgressBar } from './main.js';
+let currentWordIndex = 0;
 
-/**
- * Processes user typing input from the typing box,
- * compares it word-by-word against the script,
- * applies visual highlighting for correct words,
- * and updates the progress bar.
- *
- * @param {string[]} currentScript - Array of expected words in script order
- */
 export function handleTyping(currentScript) {
-  // === Capture and normalize typed input ===
   const typedText = document.getElementById('typingInput').value.trim().toLowerCase();
-  debugLog('typing.handleTyping', `Typed raw text: "${typedText}"`);
-
-  // Split typed input into individual words
   const typedWords = typedText.split(/\s+/);
+  const wordSpans = document.querySelectorAll('#scriptText span.word');
 
-  // Get all span elements representing script words
-  const spans = document.querySelectorAll('#scriptText span');
+  const expectedWords = currentScript.flatMap(line =>
+    stripLineNumber(line).split(/\s+/).map(cleanWord)
+  );
 
-  // === Reset all highlights before re-evaluation ===
-  spans.forEach(span => span.classList.remove('correct'));
-  debugLog('typing.handleTyping', `Cleared previous highlights.`);
-
-  // === Compare typed words to script one-by-one ===
-  spans.forEach((span, index) => {
-    const expected = cleanWord(currentScript[index] || '');
+  wordSpans.forEach((wordSpan, index) => {
+    const expected = expectedWords[index] || '';
     const typed = cleanWord(typedWords[index] || '');
+    const letterSpans = wordSpan.querySelectorAll('.letter');
 
-    debugLog('typing.matchCheck', `Word ${index} → Expected: "${expected}" | Typed: "${typed}"`);
+    // Reset coloring
+    letterSpans.forEach((letterSpan, i) => {
+      const expectedChar = expected[i] || '';
+      const typedChar = typed[i] || '';
 
-    // If words match, highlight the word in green
-    if (typed === expected) {
-      span.classList.add('correct');
-      debugLog('typing.match', `✅ Matched at index ${index}: "${typed}"`);
+      if (!typedChar) {
+        letterSpan.style.color = ''; // neutral color
+      } else if (typedChar === expectedChar) {
+        letterSpan.style.color = 'limegreen';
+      } else {
+        letterSpan.style.color = 'red';
+      }
+    });
+
+    // Add .correct to the word span if the full word matches
+    if (typed === expected && typed.length === expected.length) {
+      wordSpan.classList.add('correct');
+    } else {
+      wordSpan.classList.remove('correct'); // remove if mistyped after being correct
     }
   });
 
-  // Update visual progress bar based on matches
   updateProgressBar();
   debugLog('typing.handleTyping', 'Progress bar updated.');
 }

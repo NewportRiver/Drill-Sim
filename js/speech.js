@@ -5,7 +5,7 @@
 // updateProgressBar: updates the visual progress tracker
 import { cleanWord, debugLog } from './utils.js';
 import { triggerReward } from './rewards.js';
-import { updateProgressBar } from './main.js';
+import { updateProgressBar } from './progress.js';
 
 /**
  * Initializes continuous speech recognition and handles real-time
@@ -14,6 +14,10 @@ import { updateProgressBar } from './main.js';
  * @param {string[]} currentScript - Array of expected script words in sequence
  * @param {function} onCompleteWord - Callback function triggered after each correct word
  */
+
+// === Fire reward only once
+let rewardGiven = false;
+
 export function startSpeechRecognition(currentScript, onCompleteWord) {
   debugLog('speech.init', 'Initializing Speech Recognition');
 
@@ -58,12 +62,13 @@ export function startSpeechRecognition(currentScript, onCompleteWord) {
         block: 'center'
       });
 
-      // === If last word reached ===
-      if (currentWordIndex >= currentScript.length) {
-        recognition.stop(); // Stop listening
-        debugLog('speech.complete', '🎉 Script completed – triggering reward');
-        triggerReward();    // Show reward
-      }
+     // === Fire reward ONCE only on last word ===
+  if (currentWordIndex >= currentScript.length && !rewardGiven) {
+    recognition.stop();
+    rewardGiven = true;
+    debugLog('speech.complete', '🎉 Script completed – triggering reward');
+    triggerReward();
+  }
 
       // Notify progress externally
       onCompleteWord(currentWordIndex);
